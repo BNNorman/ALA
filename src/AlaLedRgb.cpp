@@ -9,6 +9,12 @@
 
 AlaLedRgb::AlaLedRgb()
 {
+   reset();
+}
+
+void AlaLedRgb::reset()
+{
+	// callable from user code
     // set default values
 
     maxOut = 0xFFFFFF;
@@ -18,8 +24,8 @@ AlaLedRgb::AlaLedRgb()
     refreshMillis = 1000/50;
     pxPos = NULL;
     pxSpeed = NULL;
+	stoppedFlag=false;
 }
-
 
 void AlaLedRgb::initPWM(byte pinRed, byte pinGreen, byte pinBlue)
 {
@@ -81,7 +87,15 @@ void AlaLedRgb::initWS2812(int numLeds, byte pin, byte type)
     neopixels->begin();
 }
 
+bool AlaLedRgb::getStoppedFlag()
+{
+	return stoppedFlag;
+}
 
+void AlaLedRgb::clearStoppedFlag()
+{
+	stoppedFlag=false;
+}
 
 void AlaLedRgb::setBrightness(AlaColor maxOut)
 {
@@ -241,8 +255,7 @@ bool AlaLedRgb::runAnimation()
 ///////////////////////////////////////////////////////////////////////////////
 
 void AlaLedRgb::setAnimationFunc(int animation)
-{
-
+{	
     switch(animation)
     {
         case ALA_ON:                    animFunc = &AlaLedRgb::on;                    break;
@@ -280,9 +293,17 @@ void AlaLedRgb::setAnimationFunc(int animation)
         case ALA_BOUNCINGBALLS:         animFunc = &AlaLedRgb::bouncingBalls;         break;
         case ALA_BUBBLES:               animFunc = &AlaLedRgb::bubbles;               break;
 
+		case ALA_STOP:					animFunc = &AlaLedRgb::stop;				  break;
+		
         default:                        animFunc = &AlaLedRgb::off;
     }
 
+}
+
+void AlaLedRgb::stop()
+{
+	// sets a flag to show ALA_STOP was executed
+	stoppedFlag=true;
 }
 
 
