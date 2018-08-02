@@ -1,6 +1,6 @@
 # Stopping and Starting Animations
 
-Sometinmes you might one to run one animation sequence once, do something else then start another animation sequence.
+Sometimes you might one to run one animation sequence once, do something else then start another animation sequence.
 
 
 ## Defining the sequences
