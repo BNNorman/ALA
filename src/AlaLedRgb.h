@@ -49,6 +49,9 @@ public:
     void nextAnimation();
 
 
+	void reset();
+	bool getStoppedFlag();
+	void clearStoppedFlag();
 
 private:
 
@@ -89,7 +92,8 @@ private:
     void bouncingBalls();
     void bubbles();
 
-
+	void stop();
+	
     byte driver;    // type of led driver: ALA_PWM, ALA_TLC5940
     byte *pins;     // pins where the leds are attached to
     AlaColor *leds; // array to store leds brightness values
@@ -116,6 +120,7 @@ private:
 
     Adafruit_NeoPixel *neopixels;
 
+	bool stoppedFlag;
 };
 
 
