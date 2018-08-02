@@ -74,6 +74,7 @@ along with The Arduino ALA library.  If not, see
 #define ALA_BOUNCINGBALLS 502
 #define ALA_BUBBLES 503
 
+// animation used to stop a sequence
 #define ALA_STOP	999
 
 #define ALA_ENDSEQ 0
