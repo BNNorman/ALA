@@ -82,4 +82,4 @@ void loop()
 }
 ```
 
-This would allow you to change animation sequence based on some input - though for digital inputs whcih occur whilst a sequence is running you would need to be aware that a button would need to be latched somehow, either by hardware or by capturing a transition with an interrupt.
+This would allow you to change animation sequence based on some input.
