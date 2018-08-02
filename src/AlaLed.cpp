@@ -5,11 +5,19 @@
 
 AlaLed::AlaLed()
 {
+   reset();
+}
+
+
+void AlaLed::reset()
+{
+	// callable from user code
     maxOut = 255;
     speed = 1000;
     animSeqLen = 0;
     lastRefreshTime = 0;
     refreshMillis = 1000/50;
+	stoppedFlag=false;
 }
 
 
@@ -59,6 +67,15 @@ void AlaLed::initTLC5940(int numLeds, byte *pins)
 }
 
 
+bool AlaLed::getStoppedFlag()
+{
+	return stoppedFlag;
+}
+
+void AlaLed::clearStoppedFlag()
+{
+	stoppedFlag=false;
+}
 
 void AlaLed::setBrightness(byte maxOut)
 {
@@ -95,6 +112,7 @@ void AlaLed::setAnimation(AlaSeq animSeq[])
         animSeqDuration = animSeqDuration + animSeq[animSeqLen].duration;
     }
 
+	animSeqStartTime=millis();
 }
 
 void AlaLed::nextAnimation()
@@ -105,9 +123,10 @@ void AlaLed::nextAnimation()
 void AlaLed::runAnimation()
 {
     // skip the refresh if now enough time has passed since last update
-    if (millis() < lastRefreshTime + refreshMillis)
+	unsigned long cTime = millis();
+    if (cTime < lastRefreshTime + refreshMillis)
         return;
-    lastRefreshTime = millis();
+    lastRefreshTime = cTime;
 
     if (animSeqLen != 0)
     {
@@ -115,10 +134,9 @@ void AlaLed::runAnimation()
         // NOTE: this can be optimized
 
         long c = 0;
+		long t = (cTime-animSeqStartTime)%animSeqDuration;
         for(int i=0; i<animSeqLen; i++)
         {
-            long t = millis()%animSeqDuration;   // this loops
-
             if (t>=c && t<(c+animSeq[i].duration))
             {
                 setAnimation(animSeq[i].animation, animSeq[i].speed);
@@ -184,8 +202,16 @@ void AlaLed::setAnimationFunc(int animation)
         case ALA_GLOW:                  animFunc = &AlaLed::glow;                  break;
         case ALA_FLAME:                 animFunc = &AlaLed::flame;                 break;
 
+		case ALA_STOP:					animFunc = &AlaLed::stop;				   break;
         default:                        animFunc = &AlaLed::off;
     }
+}
+
+
+void AlaLed::stop()
+{
+	// sets a flag to show ALA_STOP was executed
+	stoppedFlag=true;
 }
 
 
