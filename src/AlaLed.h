@@ -65,6 +65,9 @@ public:
     void runAnimation();
     void nextAnimation();
 
+	void reset();
+	bool getStoppedFlag();
+	void clearStoppedFlag();
 
 private:
 
@@ -94,6 +97,8 @@ private:
     void fadeInOut();
     void glow();
     void flame();
+	
+	void stop();
 
 
     byte driver; // type of led driver: ALA_PWM, ALA_TLC5940
@@ -113,7 +118,10 @@ private:
 
     void (AlaLed::*animFunc)();
     unsigned long animStartTime;
+	unsigned long animSeqStartTime;	
     unsigned long lastRefreshTime;
+	
+	bool stoppedFlag;
 
 };
 
